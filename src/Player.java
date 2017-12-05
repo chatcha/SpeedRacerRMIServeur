@@ -9,43 +9,40 @@ import java.util.Vector;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author brasc
  */
-public class Player extends Iplayer{
-    
+public class Player extends Iplayer {
+
     /**
      * Utiliser le RMI pour communiquer avec le client
      */
     private final ClientInterface client;
-     /**
-     * Un random normalement plus sécurisé que le Random classique,
-     * Il est réputé non devinable.
-     * 
+    /**
+     * Un random normalement plus sécurisé que le Random classique, Il est
+     * réputé non devinable.
+     *
      */
     private ArenaParty party;
-     /**
+    /**
      * Pour ne pas faire deux threads en même temps
      */
     private Thread updateThread = null;
-    
-    public Player(String name,ClientInterface client,ArenaParty party){
-      super(name);
-      this.party = party;
-      this.client = client;
+
+    public Player(String name, ClientInterface client, ArenaParty party) {
+        super(name);
+        this.party = party;
+        this.client = client;
     }
-    
-    
-      /**
-     * Pour mettre à jour l'affichage d'un client 
-     * 
-     * @param vTiles
+
+    /**
+     * Pour mettre à jour l'affichage d'un client
+     *
+     * @param vDisplayRoad
      * @param bGameOver
-     * @param sWinner 
+     * @param sWinner
      */
- 
     @Override
     public void update(Vector<Rectangle> vDisplayRoad, Vector<Rectangle> vDisplayObstacles, Vector<Rectangle> vDisplayCars, Car myCar, int pos, int nbParticipants, boolean bGameOver, String sPosition) {
         if (updateThread == null || updateThread.getState() == Thread.State.TERMINATED) {
@@ -54,7 +51,7 @@ public class Player extends Iplayer{
                 @Override
                 public void run() {
                     try {
-                     client.update(vDisplayRoad, vDisplayObstacles, vDisplayCars,myCar,pos,nbParticipants,bGameOver,sPosition);
+                        client.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, myCar, pos, nbParticipants, bGameOver, sPosition);
                     } catch (RemoteException ex) {
                         // Si ca plante, probablement que le client s'est deconnecté
                         // On le retire alors de la partie
@@ -65,10 +62,11 @@ public class Player extends Iplayer{
             updateThread.start();
         }
     }
-    
-   /**
-     * Quand le serveur ajoute une partie et l'annonce au client 
-     * @param name 
+
+    /**
+     * Quand le serveur ajoute une partie et l'annonce au client
+     *
+     * @param name
      */
     @Override
     public synchronized void addArena(String name) {
@@ -86,8 +84,9 @@ public class Player extends Iplayer{
     }
 
     /**
-     * Quand le serveur supprime une partie et l'annonce au client 
-     * @param name 
+     * Quand le serveur supprime une partie et l'annonce au client
+     *
+     * @param name
      */
     @Override
     public synchronized void removeArena(String name) {
@@ -103,5 +102,5 @@ public class Player extends Iplayer{
         };
         t.start();
     }
-    
+
 }

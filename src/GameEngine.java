@@ -19,18 +19,14 @@ import java.util.logging.Logger;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author brasc
  */
-public class GameEngine extends UnicastRemoteObject implements GameEngineInterface{
+public class GameEngine extends UnicastRemoteObject implements GameEngineInterface {
     
+    private ArenaParty party;
     
- 
-   
-    private  ArenaParty party;
-
     public GameEngine(ArenaParty party) throws RemoteException {
         super();
         this.party = party;
@@ -45,7 +41,7 @@ public class GameEngine extends UnicastRemoteObject implements GameEngineInterfa
      */
     @Override
     public long connect(ClientInterface client) throws RemoteException {
-        Player cLink = new Player(client.getName(), client,  party);
+        Player cLink = new Player(client.getName(), client, party);
         
         if (party.connect(cLink)) {
             System.out.println("Nouveau client connecté : " + client.getName());
@@ -80,8 +76,8 @@ public class GameEngine extends UnicastRemoteObject implements GameEngineInterfa
 
     /**
      * Rejoint une arena existante, par son nom
-     * 
-     * @param userId   id du client qui veut rejoindre l'arena
+     *
+     * @param userId id du client qui veut rejoindre l'arena
      * @param name nom de l'arena
      * @return
      * @throws RemoteException
@@ -93,10 +89,10 @@ public class GameEngine extends UnicastRemoteObject implements GameEngineInterfa
 
     /**
      * Quitte l'arene dans laquelle le client se trouve
-     * 
-     * @param userId  id du client qui veut quitter son arena
+     *
+     * @param userId id du client qui veut quitter son arena
      * @return
-     * @throws RemoteException 
+     * @throws RemoteException
      */
     @Override
     public boolean leaveArena(long userId) throws RemoteException {
@@ -105,11 +101,11 @@ public class GameEngine extends UnicastRemoteObject implements GameEngineInterfa
 
     /**
      * Crée une arena
-     * 
-     * @param userId   id du client qui veut créer une arena
+     *
+     * @param userId id du client qui veut créer une arena
      * @param name nom de l'arene à créer
      * @return
-     * @throws RemoteException 
+     * @throws RemoteException
      */
     @Override
     public boolean createArena(long userId, String name) throws RemoteException {
@@ -119,21 +115,17 @@ public class GameEngine extends UnicastRemoteObject implements GameEngineInterfa
     /**
      * Renvoie la liste des couleurs encores disponibles de l'arena à laquelle
      * participe le client userId
-     * 
+     *
      * @param userId
      * @return
-     * @throws RemoteException 
+     * @throws RemoteException
      */
-   
-
-  
-
     /**
      * Renvoie les scores de la partie en cours
-     * 
+     *
      * @param userId id du client qui fait la demande
      * @return
-     * @throws RemoteException 
+     * @throws RemoteException
      */
     @Override
     public HashMap<String, Integer> getScores(long userId) throws RemoteException {
@@ -141,70 +133,56 @@ public class GameEngine extends UnicastRemoteObject implements GameEngineInterfa
     }
 
     /**
-     * Démarre une partie, pour ça le client a du se connecter à une arena et choisir sa couleur
-     * 
+     * Démarre une partie, pour ça le client a du se connecter à une arena et
+     * choisir sa couleur
+     *
      * @param userId
      * @return
-     * @throws RemoteException 
+     * @throws RemoteException
      */
     @Override
     public boolean startGame(long userId) throws RemoteException {
         return party.startGame(userId);
     }
-
-   
-  
+    
     @Override
     public Vector<Rectangle> listvDisplayCars(long userId, String name) throws RemoteException {
         
-         return party.getVDisplayCars(userId, name);
+        return party.getVDisplayCars(userId, name);
     }
-
+    
     @Override
     public Vector<Car> listvCars(long userId, String name) throws RemoteException {
-       
-     return party.getVCars(userId, name);
+        
+        return party.getVCars(userId, name);
     }
-
+    
     @Override
     public Vector<Rectangle> listvDisplayRoad(long userId, String name) throws RemoteException {
-       
-     return party.getVDisplayRoad(userId, name);
+        
+        return party.getVDisplayRoad(userId, name);
     }
-
+    
     @Override
     public Vector<Rectangle> listvDisplayObstacles(long userId, String name) throws RemoteException {
-       
-     return party.listvDisplayObstacles(userId, name);
+        
+        return party.listvDisplayObstacles(userId, name);
     }
-
+    
     @Override
     public void newGrid(long userId) throws RemoteException {
-           party.newGrid(userId);
+        party.newGrid(userId);
     }
-
+    
     @Override
     public void beginGame(long userId) throws RemoteException {
         party.beginGame(userId);
     }
-
+    
     @Override
-    public void moveCar(long userId,String choice, boolean flag) throws RemoteException {
-    
-       // party.moveCars(userId, UP_P, DO_P, LE_P, RI_P, vCars);
+    public void moveCar(long userId, String choice, boolean flag) throws RemoteException {
+        
+        party.moveCar(userId, choice, flag);
     }
-    
-
-   
-
-  
-
- 
-
-   
-
- 
-
-    
     
 }

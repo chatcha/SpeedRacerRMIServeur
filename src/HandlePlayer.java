@@ -13,55 +13,52 @@ import java.util.logging.Logger;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author brasc
  */
 public class HandlePlayer {
-    
-     /**
+
+    /**
      * A reference to the graphical user interface
      */
-    private ClientInterface  gGUI;
-    
-      /**
+    private ClientInterface gGUI;
+
+    /**
      * Une map qui va contenir toutes les parties crées
      */
     private final Map<String, Core> arenasByName = new HashMap<>();
-    
-   
-    
-    /**Core
-     * une liste des clients par leurs nom, 
+
+    /**
+     * Core une liste des clients par leurs nom,
      */
     private final Map<String, Iplayer> clientsByName = new HashMap<>();
-    
+
     /**
-     * une liste des clients par leurs id, pour les retrouver quand ils communiquent
-     * avec le serveur 
+     * une liste des clients par leurs id, pour les retrouver quand ils
+     * communiquent avec le serveur
      */
     private final Map<Long, Iplayer> clientsById = new HashMap<>();
-    
+
     /**
-     * Utiliser pour le netoyage du serveur, après combien temps on supprime 
-     * une partie terminée
+     * Utiliser pour le netoyage du serveur, après combien temps on supprime une
+     * partie terminée
      */
     private final long maxage = 30000;
-    
+
     /**
      * Pour la boucle du netoyage, on boucle tous X 1000s
      */
     private final int checkTime = 10000;
 
     public HandlePlayer() {
-       // startManagementThread();
+        // startManagementThread();
     }
 
     /**
      * Fonctions du netoyage des veilles parties
      */
- /*   private void startManagementThread() {
+    /*   private void startManagementThread() {
         Thread serverManagement = new Thread() {
             @Override
             public void run() {
@@ -91,11 +88,11 @@ public class HandlePlayer {
         };
         serverManagement.start();
     } */
-
     /**
      * Quand un client se connecte pour la premiere fois
+     *
      * @param client
-     * @return 
+     * @return
      */
     public boolean connect(Iplayer client) {
         if (!clientsByName.containsKey(client.getName())) {
@@ -172,7 +169,7 @@ public class HandlePlayer {
         if (client != null) {
             Core arena = client.getArena();
             if (arena == null && arenasByName.get(name) == null) {
-                arenasByName.put(name, new Core( gGUI));
+                arenasByName.put(name, new Core(gGUI));
                 clientsById.values().forEach((updateclient) -> {
                     updateclient.addArena(name);
                 });
@@ -191,7 +188,7 @@ public class HandlePlayer {
      * @param source
      * @param dest
      */
-   /* public void requestMove(long userId, Fence source, Fence dest) {
+    /* public void requestMove(long userId, Fence source, Fence dest) {
         GenericClient client = clientsById.get(userId);
         if (client != null) {
             ArenaEngine arena = client.getArena();
@@ -200,7 +197,6 @@ public class HandlePlayer {
             }
         }
     } */
-
     /**
      * retourne les couleurs disponibles de l'arena dans laquelle se trouve le
      * client
@@ -208,7 +204,7 @@ public class HandlePlayer {
      * @param userId
      * @return
      */
-  /*  public HashSet<Color> listAvailableColors(long userId) {
+    /*  public HashSet<Color> listAvailableColors(long userId) {
         GenericClient client = clientsById.get(userId);
         if (client != null) {
             ArenaEngine arena = client.getArena();
@@ -218,7 +214,6 @@ public class HandlePlayer {
         }
         return null;
     } */
-
     /**
      * Permet a un client de choisir sa couleur
      *
@@ -226,7 +221,7 @@ public class HandlePlayer {
      * @param color
      * @return
      */
-   /* public boolean chooseColor(long userId, Color color) {
+    /* public boolean chooseColor(long userId, Color color) {
         GenericClient client = clientsById.get(userId);
         if (client != null) {
             ArenaEngine arena = client.getArena();
@@ -236,7 +231,6 @@ public class HandlePlayer {
         }
         return false;
     } */
-
     /**
      * Retourn la liste des scores, par id du joueur
      *
@@ -262,7 +256,7 @@ public class HandlePlayer {
      */
     public boolean startGame(long userId) {
         Iplayer client = clientsById.get(userId);
-        if (client != null ) {
+        if (client != null) {
             Core arena = client.getArena();
             if (arena != null) {
                 return arena.startGame();
@@ -272,20 +266,22 @@ public class HandlePlayer {
     }
 
     /**
-     * Pour avoir la liste des parties 
-     * @return 
+     * Pour avoir la liste des parties
+     *
+     * @return
      */
     public Set<Core> getArenas() {
         return new HashSet(arenasByName.values());
     }
 
     /**
-     * Renvoie la liste des tiles initiales 
+     * Renvoie la liste des tiles initiales
+     *
      * @param id
      * @param name
-     * @return 
+     * @return
      */
-   /* public List<Tile> getTilesFor(long id, String name) {
+    /* public List<Tile> getTilesFor(long id, String name) {
         ArenaEngine arena = arenasByName.get(name);
         GenericClient client = clientsById.get(id);
         if (arena != null && client != null) {
@@ -293,15 +289,15 @@ public class HandlePlayer {
         }
         return null;
     }*/
-    
     /**
      * Renvoie la liste des fences initiales
+     *
      * @param id
      * @param name
-     * @return 
+     * @return
      */
 
-   /* public List<Fence> getFencesFor(long id, String name) {
+    /* public List<Fence> getFencesFor(long id, String name) {
         ArenaEngine arena = arenasByName.get(name);
         GenericClient client = clientsById.get(id);
         if (arena != null && client != null) {
@@ -309,6 +305,4 @@ public class HandlePlayer {
         }
         return null;
     }*/
-
-    
 }

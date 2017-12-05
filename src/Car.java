@@ -3,21 +3,24 @@
  * and open the template in the editor.
  */
 
-
 /**
  * Represents a car, which is a CollidableRectangle with effect 1 (bounce)
+ *
  * @author Sam
  * @version 1.0
  */
 public class Car extends CollidableRectangle {
-    
+
     /**
-     * The Car speed on the x-axis (positive means on the right, negative on the left) ([-8,8])
+     * The Car speed on the x-axis (positive means on the right, negative on the
+     * left) ([-8,8])
      */
     public double xSpeed;
 
     /**
-     * The Car speed on the y-axis ([0.5,2] for civilans, [0.5,3.58] for racers, [0.5,4.64] for player. Can be 0 if blocked or greater than the max if pushed. Multiply by 50 to obtain the speed in Km/h.
+     * The Car speed on the y-axis ([0.5,2] for civilans, [0.5,3.58] for racers,
+     * [0.5,4.64] for player. Can be 0 if blocked or greater than the max if
+     * pushed. Multiply by 50 to obtain the speed in Km/h.
      */
     public double ySpeed;
 
@@ -37,7 +40,8 @@ public class Car extends CollidableRectangle {
     public boolean Racer;
 
     /**
-     * The number of 50ms rounds during which the car is busted by the police (default : 0)
+     * The number of 50ms rounds during which the car is busted by the police
+     * (default : 0)
      */
     public int bustedTime;
 
@@ -48,7 +52,8 @@ public class Car extends CollidableRectangle {
 
     /**
      * Constructor
-      * @param x The position of the Rectangle on the x-axis
+     *
+     * @param x The position of the Rectangle on the x-axis
      * @param y The position of the Rectangle on the y-axis
      * @param width Rectangle width
      * @param height Rectangle height
@@ -60,9 +65,8 @@ public class Car extends CollidableRectangle {
      * @param yAcc The acceleration of the car on the y-axis
      * @param Racer The car type
      */
-    public Car(double x, double y, int width, int height, int id, int effect, double xSpeed, double ySpeed, int xAcc, int yAcc, boolean Racer)
-    {
-        super(x,y,width,height,id,effect);
+    public Car(double x, double y, int width, int height, int id, int effect, double xSpeed, double ySpeed, int xAcc, int yAcc, boolean Racer) {
+        super(x, y, width, height, id, effect);
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
         this.xAcc = xAcc;

@@ -3,13 +3,14 @@
  * and open the template in the editor.
  */
 
-
 /**
  * Used to represent the finite state machine that is used to generate the road.
+ *
  * @author Sam
  * @version 1.0
  */
 public class FiniteState {
+
     /**
      * The ID of the state (primary key)
      */
@@ -37,25 +38,26 @@ public class FiniteState {
 
     /**
      * Constructor
+     *
      * @param iId The ID of the state (primary key)
-     * @param sRepresentation The String representation of the state (used for debugging only)
+     * @param sRepresentation The String representation of the state (used for
+     * debugging only)
      */
-    public FiniteState(int iId, String sRepresentation)
-    {
+    public FiniteState(int iId, String sRepresentation) {
         this.iId = iId;
         this.sRepresentation = new String(sRepresentation);
     }
 
     /**
-     * Randomly selects a state from the nextState array according to dStateProb probability
+     * Randomly selects a state from the nextState array according to dStateProb
+     * probability
+     *
      * @return The randomly selected state
      */
-    public FiniteState nextState()
-    {
+    public FiniteState nextState() {
         int selected = 0;
         double dRand = Math.random();
-        while(dRand > dStateProb[selected])
-        {
+        while (dRand > dStateProb[selected]) {
             dRand -= dStateProb[selected];
             selected++;
         }

@@ -12,17 +12,17 @@ import java.util.logging.Logger;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author brasc
  */
 public class SpeedRacer {
-      public static final ArenaParty party = new ArenaParty();
-    
-	public static void main(String[] args) {
-		
-	/*	String portNum, registryURL;
+
+    public static final ArenaParty party = new ArenaParty();
+
+    public static void main(String[] args) {
+
+        /*	String portNum, registryURL;
             
             try {
                 
@@ -34,47 +34,44 @@ public class SpeedRacer {
         } catch (RemoteException ex) {
             Logger.getLogger(SpeedRacer.class.getName()).log(Level.SEVERE, null, ex);
         }*/
-  String portNum, registryURL;
-   
-    try{     
+        String portNum, registryURL;
 
-  
-   
-      int RMIPortNum = 1099;
-      String url = "127.0.0.1";
-      startRegistry(RMIPortNum);
-      
-      GameEngine exportedObj = 
-        new GameEngine(party);
-      
-       
-      registryURL="rmi://"+url+":"+ 1099 + "/GameServer";
-    
-      Naming.rebind(registryURL, exportedObj);
-      System.out.println("Server ready."+InetAddress.getLocalHost().getHostAddress());
-    }// end try
-    catch (Exception re) {
-      System.out.println(
-        "Exception in LightBikesServer.main: " + re);
-    } // end catch
-    
-  } // end main
-	
-	//This method starts a RMI registry on the local host, if
-  //it does not already exists at the specified port number.
-  private static void startRegistry(int RMIPortNum)
-    throws RemoteException{
-    try {
-      Registry registry = 
-        LocateRegistry.getRegistry(RMIPortNum);
-      registry.list( );  
-        // This call will throw an exception
-        // if the registry does not already exist
-    }
-    catch (RemoteException e) { 
-      // No valid registry at that port.
-      Registry registry = 
-        LocateRegistry.createRegistry(RMIPortNum);
-    }
-  } // end startRegistry
+        try {
+
+            int RMIPortNum = 1099;
+            String url = "127.0.0.1";
+            // String url = "10.113.101.71";
+            startRegistry(RMIPortNum);
+
+            GameEngine exportedObj
+                    = new GameEngine(party);
+
+            registryURL = "rmi://" + url + ":" + 1099 + "/GameServer";
+
+            Naming.rebind(registryURL, exportedObj);
+            System.out.println("Server ready.");
+        }// end try
+        catch (Exception re) {
+            System.out.println(
+                    "Exception in LightBikesServer.main: " + re);
+        } // end catch
+
+    } // end main
+
+    //This method starts a RMI registry on the local host, if
+    //it does not already exists at the specified port number.
+    private static void startRegistry(int RMIPortNum)
+            throws RemoteException {
+        try {
+            Registry registry
+                    = LocateRegistry.getRegistry(RMIPortNum);
+            registry.list();
+            // This call will throw an exception
+            // if the registry does not already exist
+        } catch (RemoteException e) {
+            // No valid registry at that port.
+            Registry registry
+                    = LocateRegistry.createRegistry(RMIPortNum);
+        }
+    } // end startRegistry
 }

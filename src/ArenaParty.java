@@ -18,44 +18,42 @@ import java.util.logging.Logger;
  */
 public class ArenaParty {
 
-     /**
+    /**
      * A reference to the graphical user interface
      */
-    private ClientInterface  gGUI;
+    private ClientInterface gGUI;
     /**
      * Une map qui va contenir toutes les parties crées
      */
     private final Map<String, Core> arenasByName = new HashMap<>();
-    
-   
-    
+
     /**
-     * une liste des clients par leurs nom, 
+     * une liste des clients par leurs nom,
      */
     private final Map<String, Iplayer> clientsByName = new HashMap<>();
-    
+
     /**
-     * une liste des clients par leurs id, pour les retrouver quand ils communiquent
-     * avec le serveur 
+     * une liste des clients par leurs id, pour les retrouver quand ils
+     * communiquent avec le serveur
      */
     private final Map<Long, Iplayer> clientsById = new HashMap<>();
-    
+
     /**
-     * Utiliser pour le netoyage du serveur, après combien temps on supprime 
-     * une partie terminée
+     * Utiliser pour le netoyage du serveur, après combien temps on supprime une
+     * partie terminée
      */
     private final long maxage = 30000;
-    
+
     /**
      * Pour la boucle du netoyage, on boucle tous X 1000s
      */
     private final int checkTime = 10000;
 
     public ArenaParty() {
-      startManagementThread();
+        startManagementThread();
     }
 
-   /**
+    /**
      * Fonctions du netoyage des veilles parties
      */
     private void startManagementThread() {
@@ -78,7 +76,7 @@ public class ArenaParty {
                                 arenasByName.remove(name);
                                 arena.clearGame();
                                 clientsById.values().forEach((updateclient) -> {
-                                    updateclient.removeArena((String)name);
+                                    updateclient.removeArena((String) name);
                                 });
                             }
                         }
@@ -88,10 +86,12 @@ public class ArenaParty {
         };
         serverManagement.start();
     }
+
     /**
      * Quand un client se connecte pour la premiere fois
+     *
      * @param client
-     * @return 
+     * @return
      */
     public boolean connect(Iplayer client) {
         if (!clientsByName.containsKey(client.getName())) {
@@ -178,11 +178,6 @@ public class ArenaParty {
         return false;
     }
 
-   
-
-   
-  
-
     /**
      * Retourn la liste des scores, par couleur
      *
@@ -216,8 +211,8 @@ public class ArenaParty {
         }
         return false;
     }
-    
-     /**
+
+    /**
      * Démarre la partie dans laquelle se trouve le client
      *
      * @param userId
@@ -229,13 +224,13 @@ public class ArenaParty {
             Core arena = client.getArena();
             if (arena != null) {
                 arena.newGrid();
-               
+
             }
         }
-        
+
     }
-    
-     /**
+
+    /**
      * Lance la partie dans laquelle se trouve le client
      *
      * @param userId
@@ -247,44 +242,45 @@ public class ArenaParty {
             Core arena = client.getArena();
             if (arena != null) {
                 arena.beginGame();
-               
+
             }
         }
-        
+
     }
-    
-    
-     /**
+
+    /**
      * Lance la partie dans laquelle se trouve le client
      *
      * @param userId
      * @return
      */
-   public void moveCar(long userId,String choice, boolean flag) {
+    public void moveCar(long userId, String choice, boolean flag) {
         Iplayer client = clientsById.get(userId);
         if (client != null) {
             Core arena = client.getArena();
             if (arena != null) {
                 arena.moveCar(choice, flag);
-               
+
             }
         }
-        
+
     }
 
     /**
-     * Pour avoir la liste des parties 
-     * @return 
+     * Pour avoir la liste des parties
+     *
+     * @return
      */
     public Set<Core> getArenas() {
         return new HashSet(arenasByName.values());
     }
 
     /**
-     * Renvoie la liste des VDisplayRoad initiales 
+     * Renvoie la liste des VDisplayRoad initiales
+     *
      * @param id
      * @param name
-     * @return 
+     * @return
      */
     public Vector<Rectangle> getVDisplayRoad(long id, String name) {
         Core arena = arenasByName.get(name);
@@ -294,12 +290,13 @@ public class ArenaParty {
         }
         return null;
     }
-    
-      /**
-     * Renvoie la liste des "voitures" initiales 
+
+    /**
+     * Renvoie la liste des "voitures" initiales
+     *
      * @param id
      * @param name
-     * @return 
+     * @return
      */
     public Vector<Car> getVCars(long id, String name) {
         Core arena = arenasByName.get(name);
@@ -309,17 +306,15 @@ public class ArenaParty {
         }
         return null;
     }
-    
-    
-    
-    
-     /**
-     * Renvoie la liste des "VDisplayCars" initiales 
+
+    /**
+     * Renvoie la liste des "VDisplayCars" initiales
+     *
      * @param id
      * @param name
-     * @return 
+     * @return
      */
-    public Vector<Rectangle> getVDisplayCars(long id, String name){
+    public Vector<Rectangle> getVDisplayCars(long id, String name) {
         Core arena = arenasByName.get(name);
         Iplayer client = clientsById.get(id);
         if (arena != null && client != null) {
@@ -327,14 +322,15 @@ public class ArenaParty {
         }
         return null;
     }
-    
-      /**
-     * Renvoie la liste des "VDisplayCars" initiales 
+
+    /**
+     * Renvoie la liste des "VDisplayCars" initiales
+     *
      * @param id
      * @param name
-     * @return 
+     * @return
      */
-    public Vector<Rectangle> listvDisplayObstacles (long id, String name){
+    public Vector<Rectangle> listvDisplayObstacles(long id, String name) {
         Core arena = arenasByName.get(name);
         Iplayer client = clientsById.get(id);
         if (arena != null && client != null) {
@@ -346,10 +342,5 @@ public class ArenaParty {
     public void setgGUI(ClientInterface gGUI) {
         this.gGUI = gGUI;
     }
-    
-   
-    
-    
-   
 
 }

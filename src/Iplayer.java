@@ -8,41 +8,39 @@ import java.util.Vector;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author brasc
  */
 public abstract class Iplayer {
-     /**
-     * Un random normalement plus sécurisé que le Random classique,
-     * Il est réputé non devinable.
-     * 
+
+    /**
+     * Un random normalement plus sécurisé que le Random classique, Il est
+     * réputé non devinable.
+     *
      */
     private static final SecureRandom prng = new SecureRandom();
 
-   
     /**
      * Nom du client choisi à la connexion
      */
-    private final String name ;
-    
+    private final String name;
+
     /**
      * Utiliser le Random pour generer un id unisque au client
      */
     private final long userId = prng.nextLong();
-    
-     /**
+
+    /**
      * Pour enregistrer la partie à laquelle le client appartient
      */
     private Core core = null;
-    
-     protected Iplayer(String name) {
+
+    protected Iplayer(String name) {
         this.name = name;
     }
-     
-     
-       /**
+
+    /**
      * C'est la méthode qui est appellée par l'arena quand elle veut lancer la
      * mise à jour du client Cette méthode doit être implémentée par le système
      * de communication (RMI...)
@@ -51,17 +49,13 @@ public abstract class Iplayer {
      * @param bGameOver Indique si la partie est terminée
      * @param sWinner Le gagnant, si la partie est terminée
      */
+    public abstract void update(Vector<Rectangle> vDisplayRoad, Vector<Rectangle> vDisplayObstacles, Vector<Rectangle> vDisplayCars, Car myCar, int pos, int nbParticipants, boolean bGameOver, String sPosition) throws java.rmi.RemoteException;
 
-    public abstract void  update(Vector<Rectangle> vDisplayRoad, Vector<Rectangle> vDisplayObstacles, Vector<Rectangle> vDisplayCars, Car myCar, int pos, int nbParticipants, boolean bGameOver, String sPosition) throws java.rmi.RemoteException;
-    
     public abstract void addArena(String name);
 
     public abstract void removeArena(String name);
-    
-    
-    
-    
-     /**
+
+    /**
      * Retourne l'id unique du client
      *
      * @return
@@ -91,8 +85,8 @@ public abstract class Iplayer {
     public Core getCore() {
         return core;
     }
-    
-     /**
+
+    /**
      * Fait entrer le client dans une arena
      *
      * @param arena
