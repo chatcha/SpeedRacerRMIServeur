@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 /*
  * 
  * Une classe qui va contenir tous les joueurs connectés 
-  et toutes les parties crées. 
+  et toutes les parties crées du jeu.
  * 
  */
 public class ArenaParty {
