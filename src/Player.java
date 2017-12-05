@@ -30,19 +30,29 @@ public class Player extends Iplayer {
      */
     private Thread updateThread = null;
 
+    /**
+     *
+     * @param name
+     * @param client
+     * @param party
+     */
     public Player(String name, ClientInterface client, ArenaParty party) {
         super(name);
         this.party = party;
         this.client = client;
     }
 
-    /**
-     * Pour mettre à jour l'affichage d'un client
-     *
-     * @param vDisplayRoad
-     * @param bGameOver
-     * @param sWinner
-     */
+   /**
+    * Pour mettre à jour l'affichage d'un client
+    * @param vDisplayRoad
+    * @param vDisplayObstacles
+    * @param vDisplayCars
+    * @param myCar
+    * @param pos
+    * @param nbParticipants
+    * @param bGameOver
+    * @param sPosition 
+    */
     @Override
     public void update(Vector<Rectangle> vDisplayRoad, Vector<Rectangle> vDisplayObstacles, Vector<Rectangle> vDisplayCars, Car myCar, int pos, int nbParticipants, boolean bGameOver, String sPosition) {
         if (updateThread == null || updateThread.getState() == Thread.State.TERMINATED) {

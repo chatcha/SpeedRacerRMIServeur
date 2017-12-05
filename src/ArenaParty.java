@@ -216,7 +216,6 @@ public class ArenaParty {
      * Démarre la partie dans laquelle se trouve le client
      *
      * @param userId
-     * @return
      */
     public void newGrid(long userId) {
         Iplayer client = clientsById.get(userId);
@@ -234,7 +233,6 @@ public class ArenaParty {
      * Lance la partie dans laquelle se trouve le client
      *
      * @param userId
-     * @return
      */
     public void beginGame(long userId) {
         Iplayer client = clientsById.get(userId);
@@ -249,10 +247,11 @@ public class ArenaParty {
     }
 
     /**
-     * Lance la partie dans laquelle se trouve le client
+     * Permet de déplacer la voiture
      *
      * @param userId
-     * @return
+     * @param choice
+     * @param flag
      */
     public void moveCar(long userId, String choice, boolean flag) {
         Iplayer client = clientsById.get(userId);
@@ -339,6 +338,11 @@ public class ArenaParty {
         return null;
     }
 
+    /**
+     * Mettre à jour la GUI
+     *
+     * @param gGUI
+     */
     public void setgGUI(ClientInterface gGUI) {
         this.gGUI = gGUI;
     }

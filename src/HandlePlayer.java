@@ -1,12 +1,8 @@
 
-import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -180,59 +176,7 @@ public class HandlePlayer {
     }
 
     /**
-     * permet a un client de faire une requete de déplacement de ses troupes
-     * TODO: tester si le déplacement demandé concerne des fences détenue par le
-     * client en question
-     *
-     * @param userId
-     * @param source
-     * @param dest
-     */
-    /* public void requestMove(long userId, Fence source, Fence dest) {
-        GenericClient client = clientsById.get(userId);
-        if (client != null) {
-            ArenaEngine arena = client.getArena();
-            if (arena != null) {
-                arena.requestMove(source, dest);
-            }
-        }
-    } */
-    /**
-     * retourne les couleurs disponibles de l'arena dans laquelle se trouve le
-     * client
-     *
-     * @param userId
-     * @return
-     */
-    /*  public HashSet<Color> listAvailableColors(long userId) {
-        GenericClient client = clientsById.get(userId);
-        if (client != null) {
-            ArenaEngine arena = client.getArena();
-            if (arena != null) {
-                return arena.listAvailableColors();
-            }
-        }
-        return null;
-    } */
-    /**
-     * Permet a un client de choisir sa couleur
-     *
-     * @param userId
-     * @param color
-     * @return
-     */
-    /* public boolean chooseColor(long userId, Color color) {
-        GenericClient client = clientsById.get(userId);
-        if (client != null) {
-            ArenaEngine arena = client.getArena();
-            if (arena != null) {
-                return arena.chooseColor(client, color);
-            }
-        }
-        return false;
-    } */
-    /**
-     * Retourn la liste des scores, par id du joueur
+     * Liste des scores
      *
      * @param userId
      * @return
@@ -274,35 +218,4 @@ public class HandlePlayer {
         return new HashSet(arenasByName.values());
     }
 
-    /**
-     * Renvoie la liste des tiles initiales
-     *
-     * @param id
-     * @param name
-     * @return
-     */
-    /* public List<Tile> getTilesFor(long id, String name) {
-        ArenaEngine arena = arenasByName.get(name);
-        GenericClient client = clientsById.get(id);
-        if (arena != null && client != null) {
-            return arena.alTiles;
-        }
-        return null;
-    }*/
-    /**
-     * Renvoie la liste des fences initiales
-     *
-     * @param id
-     * @param name
-     * @return
-     */
-
-    /* public List<Fence> getFencesFor(long id, String name) {
-        ArenaEngine arena = arenasByName.get(name);
-        GenericClient client = clientsById.get(id);
-        if (arena != null && client != null) {
-            return arena.alFences;
-        }
-        return null;
-    }*/
 }

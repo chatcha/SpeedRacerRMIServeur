@@ -578,15 +578,13 @@ public class Core {
         }
     }
 
-    /**
-     * Manages the collisions
-     *
-     * @param Cars The vector of cars (which are the actors of the collision)
-     * @param vObstacles The vector of obstacles (which are passively collided).
-     * Also contains the cars
-     * @param bGameFinishing True if the finish line has been passed
-     * @return True if the finish line has just been passed. False otherwise
-     */
+   /**
+    * Manages the collisions
+    * @param Cars
+    * @param vTabObstacles
+    * @param bGameFinishing
+    * @return 
+    */
     public boolean manageCollisions(Vector<Car> Cars, Vector<CollidableRectangle>[] vTabObstacles, boolean bGameFinishing) {
         //Is the finish line been passed?
         boolean bgf = bGameFinishing;
@@ -915,14 +913,12 @@ public class Core {
     /**
      * Extracts the visible rectangles to display according to the player's car
      * position and speed
-     *
-     * @param vRoad The vector of road elements
-     * @param vObstacles The vector of obstacles
-     * @param vCars The vector of cars
-     * @param vDisplayRoad The vector of road elements to display (updated)
-     * @param vDisplayObstacles The vector of collision warning rectagles
-     * (updated)
-     * @param vDisplayCars The vector of cars to display (updated)
+     * @param vTabRoad
+     * @param vTabObstacles
+     * @param vCars
+     * @param vDisplayRoad
+     * @param vDisplayObstacles
+     * @param vDisplayCars 
      */
     public void findDisplayRectangles(Vector<Rectangle>[] vTabRoad, Vector<CollidableRectangle>[] vTabObstacles, Vector<Car> vCars,
             Vector<Rectangle> vDisplayRoad, Vector<Rectangle> vDisplayObstacles, Vector<Rectangle> vDisplayCars) {
@@ -1045,16 +1041,14 @@ public class Core {
         return rr;
     }
 
-    /**
-     * Uses the randomly selected state to generate a new road segment of size
-     * 400x400
-     *
-     * @param vRoad The vector of road elements (updated)
-     * @param vObstacles The vector of obstacles (updated)
-     * @param iSegmentId The id of the state that were randomly selected by the
-     * finite state machine
-     * @param offset The offset to apply to the 400x400 segment on the y axis
-     */
+  /**
+   * Uses the randomly selected state to generate a new road segment of size
+   * 400x400
+   * @param vTabRoad
+   * @param vTabObstacles
+   * @param iSegmentId
+   * @param offset 
+   */
     public void generateNextRoadSegment(Vector<Rectangle>[] vTabRoad, Vector<CollidableRectangle>[] vTabObstacles, int iSegmentId, int offset) {
         //The machine has 14 states.
         //For each character in the String representation of a state,
@@ -1884,10 +1878,9 @@ public class Core {
     }
 
     /**
-     * Pour aller chercher le nom du gagnant en fonction de sa couleur
-     *
-     * @param candidateWinner
-     * @return
+     * Pour aller chercher le nom du gagnant en fonction de son ID
+     * @param idWinner
+     * @return 
      */
     private String findName(long idWinner) {
 

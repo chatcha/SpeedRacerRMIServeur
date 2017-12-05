@@ -24,9 +24,9 @@ import java.util.logging.Logger;
  * @author brasc
  */
 public class GameEngine extends UnicastRemoteObject implements GameEngineInterface {
-    
+
     private ArenaParty party;
-    
+
     public GameEngine(ArenaParty party) throws RemoteException {
         super();
         this.party = party;
@@ -42,7 +42,7 @@ public class GameEngine extends UnicastRemoteObject implements GameEngineInterfa
     @Override
     public long connect(ClientInterface client) throws RemoteException {
         Player cLink = new Player(client.getName(), client, party);
-        
+
         if (party.connect(cLink)) {
             System.out.println("Nouveau client connecté : " + client.getName());
             party.setgGUI(client);
@@ -144,45 +144,45 @@ public class GameEngine extends UnicastRemoteObject implements GameEngineInterfa
     public boolean startGame(long userId) throws RemoteException {
         return party.startGame(userId);
     }
-    
+
     @Override
     public Vector<Rectangle> listvDisplayCars(long userId, String name) throws RemoteException {
-        
+
         return party.getVDisplayCars(userId, name);
     }
-    
+
     @Override
     public Vector<Car> listvCars(long userId, String name) throws RemoteException {
-        
+
         return party.getVCars(userId, name);
     }
-    
+
     @Override
     public Vector<Rectangle> listvDisplayRoad(long userId, String name) throws RemoteException {
-        
+
         return party.getVDisplayRoad(userId, name);
     }
-    
+
     @Override
     public Vector<Rectangle> listvDisplayObstacles(long userId, String name) throws RemoteException {
-        
+
         return party.listvDisplayObstacles(userId, name);
     }
-    
+
     @Override
     public void newGrid(long userId) throws RemoteException {
         party.newGrid(userId);
     }
-    
+
     @Override
     public void beginGame(long userId) throws RemoteException {
         party.beginGame(userId);
     }
-    
+
     @Override
     public void moveCar(long userId, String choice, boolean flag) throws RemoteException {
-        
+
         party.moveCar(userId, choice, flag);
     }
-    
+
 }

@@ -36,23 +36,38 @@ public abstract class Iplayer {
      */
     private Core core = null;
 
+    /**
+     * Constructeur
+     * @param name 
+     */
     protected Iplayer(String name) {
         this.name = name;
     }
 
     /**
-     * C'est la méthode qui est appellée par l'arena quand elle veut lancer la
-     * mise à jour du client Cette méthode doit être implémentée par le système
-     * de communication (RMI...)
-     *
-     * @param vTiles La liste des tiles à jour
-     * @param bGameOver Indique si la partie est terminée
-     * @param sWinner Le gagnant, si la partie est terminée
+     * 
+     * @param vDisplayRoad
+     * @param vDisplayObstacles
+     * @param vDisplayCars
+     * @param myCar
+     * @param pos
+     * @param nbParticipants
+     * @param bGameOver
+     * @param sPosition
+     * @throws java.rmi.RemoteException 
      */
     public abstract void update(Vector<Rectangle> vDisplayRoad, Vector<Rectangle> vDisplayObstacles, Vector<Rectangle> vDisplayCars, Car myCar, int pos, int nbParticipants, boolean bGameOver, String sPosition) throws java.rmi.RemoteException;
 
+    /**
+     * 
+     * @param name 
+     */
     public abstract void addArena(String name);
 
+    /**
+     * 
+     * @param name 
+     */
     public abstract void removeArena(String name);
 
     /**
@@ -70,9 +85,8 @@ public abstract class Iplayer {
 
     /**
      * Fait entrer le client dans une arena
-     *
-     * @param arena
-     * @return
+     * @param core
+     * @return 
      */
     public boolean setCore(Core core) {
         if (core == null || this.core == null) {
@@ -88,9 +102,8 @@ public abstract class Iplayer {
 
     /**
      * Fait entrer le client dans une arena
-     *
-     * @param arena
-     * @return
+     * @param core
+     * @return 
      */
     public boolean setArena(Core core) {
         if (core == null || this.core == null) {
