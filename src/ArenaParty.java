@@ -28,7 +28,7 @@ public class ArenaParty {
     private final Map<String, Core> arenasByName = new HashMap<>();
 
     /**
-     * une liste des clients par leurs nom,
+     * une liste des clients par leurs noms,
      */
     private final Map<String, Iplayer> clientsByName = new HashMap<>();
 

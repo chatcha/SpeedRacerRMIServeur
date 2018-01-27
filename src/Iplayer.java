@@ -25,6 +25,11 @@ public abstract class Iplayer {
      * Nom du client choisi à la connexion
      */
     private final String name;
+    
+    /**
+     * Score du client
+     */
+    private int score = 0;
 
     /**
      * Utiliser le Random pour generer un id unisque au client
@@ -98,6 +103,22 @@ public abstract class Iplayer {
 
     public Core getCore() {
         return core;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public int getScore() {
+        return score;
+    }
+
+    /**
+     * 
+     * @param score 
+     */
+    public void setScore(int score) {    
+        this.score = score;
     }
 
     /**
