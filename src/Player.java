@@ -65,7 +65,7 @@ public class Player extends Iplayer {
                     } catch (RemoteException ex) {
                         // Si ca plante, probablement que le client s'est deconnecté
                         // On le retire alors de la partie
-                        party.disconnect(this.getId());
+                        party.disconnect(getId());
                     }
                 }
             };
@@ -86,7 +86,7 @@ public class Player extends Iplayer {
                 try {
                     client.addParty(name);
                 } catch (RemoteException ex) {
-                    SpeedRacer.party.disconnect(Player.this.getId());
+                    party.disconnect(getId());
                 }
             }
         };
@@ -106,7 +106,7 @@ public class Player extends Iplayer {
                 try {
                     client.removeParty(name);
                 } catch (RemoteException ex) {
-                    SpeedRacer.party.disconnect(Player.this.getId());
+                    party.disconnect(getId());
                 }
             }
         };

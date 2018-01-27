@@ -94,7 +94,7 @@ public abstract class Iplayer {
      * @return 
      */
     public boolean setCore(Core core) {
-        if (core == null || this.core == null) {
+        if (core != null || this.core == null) {
             this.core = core;
             return true;
         }

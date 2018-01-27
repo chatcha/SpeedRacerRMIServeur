@@ -36,8 +36,9 @@ public class ArenaParty {
      * une liste des clients par leurs id, pour les retrouver quand ils
      * communiquent avec le serveur
      */
-    private final Map<Long, Iplayer> clientsById = new HashMap<>();
+   // private final Map<Long, Iplayer> clientsById = new HashMap<>();
 
+     private final Map<Long, Player> clientsById = new HashMap<>();
     /**
      * Utiliser pour le netoyage du serveur, après combien temps on supprime une
      * partie terminée
@@ -93,7 +94,7 @@ public class ArenaParty {
      * @param client
      * @return
      */
-    public boolean connect(Iplayer client) {
+    public boolean connect(Player client) {
         if (!clientsByName.containsKey(client.getName())) {
             clientsByName.put(client.getName(), client);
             clientsById.put(client.getId(), client);
@@ -109,7 +110,7 @@ public class ArenaParty {
      * @param userId
      */
     public void disconnect(long userId) {
-        Iplayer client = clientsById.remove(userId);
+        Player client = clientsById.remove(userId);
         if (client != null) {
             clientsByName.remove(client.getName());
             Core arena = client.getArena();
@@ -136,9 +137,10 @@ public class ArenaParty {
      * @return
      */
     public boolean joinArena(long userId, String name) {
-        Iplayer client = clientsById.get(userId);
+        Player client = clientsById.get(userId);
         Core arena = arenasByName.get(name);
-        return client != null && arena != null && arena.addPlayer(client);
+        //return client != null && arena != null && arena.addPlayer(client);
+        return client != null && arena != null && arena.setPlayer(client);
     }
 
     /**
@@ -148,7 +150,7 @@ public class ArenaParty {
      * @return
      */
     public boolean leaveArena(long userId) {
-        Iplayer client = clientsById.get(userId);
+        Player client = clientsById.get(userId);
         if (client != null) {
             Core arena = client.getArena();
             return arena != null && arena.removePlayer(client);
@@ -164,11 +166,12 @@ public class ArenaParty {
      * @return
      */
     public boolean createArena(long userId, String name) {
-        Iplayer client = clientsById.get(userId);
+        Player client = clientsById.get(userId);
+       // Player clientc = clientsById.get(userId);
         if (client != null) {
             Core arena = client.getArena();
             if (arena == null && arenasByName.get(name) == null) {
-                arenasByName.put(name, new Core(gGUI));
+                arenasByName.put(name, new Core());
                 clientsById.values().forEach((updateclient) -> {
                     updateclient.addArena(name);
                 });
@@ -185,7 +188,7 @@ public class ArenaParty {
      * @return
      */
     public HashMap<String, Integer> getScores(long userId) {
-        Iplayer client = clientsById.get(userId);
+        Player client = clientsById.get(userId);
         if (client != null) {
             Core arena = client.getArena();
             if (arena != null) {
@@ -202,11 +205,13 @@ public class ArenaParty {
      * @return
      */
     public boolean startGame(long userId) {
-        Iplayer client = clientsById.get(userId);
+        Player client = clientsById.get(userId);
         if (client != null) {
             Core arena = client.getArena();
             if (arena != null) {
+                System.out.println("ArenaParty.startGame()");
                 return arena.startGame();
+                
             }
         }
         return false;
@@ -218,10 +223,12 @@ public class ArenaParty {
      * @param userId
      */
     public void newGrid(long userId) {
-        Iplayer client = clientsById.get(userId);
+        Player client = clientsById.get(userId);
         if (client != null) {
             Core arena = client.getArena();
             if (arena != null) {
+                
+                System.out.println("ArenaParty.newGrid()");
                 arena.newGrid();
 
             }
@@ -235,7 +242,7 @@ public class ArenaParty {
      * @param userId
      */
     public void beginGame(long userId) {
-        Iplayer client = clientsById.get(userId);
+        Player client = clientsById.get(userId);
         if (client != null) {
             Core arena = client.getArena();
             if (arena != null) {
@@ -244,6 +251,22 @@ public class ArenaParty {
             }
         }
 
+    }
+    
+    
+     public int getScoreClient(long userId) {
+        int x=0;
+        Player client = clientsById.get(userId);
+        if (client != null) {
+            Core arena = client.getArena();
+            if (arena != null) {
+                x = arena.getScore();
+                client.setScore(x);
+                return x;
+
+            }
+        }
+       return client.getScore();
     }
 
     /**
@@ -254,7 +277,7 @@ public class ArenaParty {
      * @param flag
      */
     public void moveCar(long userId, String choice, boolean flag) {
-        Iplayer client = clientsById.get(userId);
+        Player client = clientsById.get(userId);
         if (client != null) {
             Core arena = client.getArena();
             if (arena != null) {
@@ -283,7 +306,7 @@ public class ArenaParty {
      */
     public Vector<Rectangle> getVDisplayRoad(long id, String name) {
         Core arena = arenasByName.get(name);
-        Iplayer client = clientsById.get(id);
+        Player client = clientsById.get(id);
         if (arena != null && client != null) {
             return arena.vDisplayRoad;
         }
@@ -299,7 +322,7 @@ public class ArenaParty {
      */
     public Vector<Car> getVCars(long id, String name) {
         Core arena = arenasByName.get(name);
-        Iplayer client = clientsById.get(id);
+        Player client = clientsById.get(id);
         if (arena != null && client != null) {
             return arena.vCars;
         }
@@ -315,7 +338,7 @@ public class ArenaParty {
      */
     public Vector<Rectangle> getVDisplayCars(long id, String name) {
         Core arena = arenasByName.get(name);
-        Iplayer client = clientsById.get(id);
+        Player client = clientsById.get(id);
         if (arena != null && client != null) {
             return arena.vDisplayCars;
         }
@@ -331,7 +354,7 @@ public class ArenaParty {
      */
     public Vector<Rectangle> listvDisplayObstacles(long id, String name) {
         Core arena = arenasByName.get(name);
-        Iplayer client = clientsById.get(id);
+        Player client = clientsById.get(id);
         if (arena != null && client != null) {
             return arena.vDisplayObstacles;
         }

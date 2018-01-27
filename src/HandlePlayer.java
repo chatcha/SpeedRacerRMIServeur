@@ -34,7 +34,7 @@ public class HandlePlayer {
      * une liste des clients par leurs id, pour les retrouver quand ils
      * communiquent avec le serveur
      */
-    private final Map<Long, Iplayer> clientsById = new HashMap<>();
+    private final Map<Long, Player> clientsById = new HashMap<>();
 
     /**
      * Utiliser pour le netoyage du serveur, après combien temps on supprime une
@@ -90,7 +90,7 @@ public class HandlePlayer {
      * @param client
      * @return
      */
-    public boolean connect(Iplayer client) {
+    public boolean connect(Player client) {
         if (!clientsByName.containsKey(client.getName())) {
             clientsByName.put(client.getName(), client);
             clientsById.put(client.getId(), client);
@@ -106,7 +106,7 @@ public class HandlePlayer {
      * @param userId
      */
     public void disconnect(long userId) {
-        Iplayer client = clientsById.remove(userId);
+        Player client = clientsById.remove(userId);
         if (client != null) {
             clientsByName.remove(client.getName());
             Core arena = client.getArena();
@@ -133,7 +133,7 @@ public class HandlePlayer {
      * @return
      */
     public boolean joinArena(long userId, String name) {
-        Iplayer client = clientsById.get(userId);
+        Player client = clientsById.get(userId);
         Core arena = arenasByName.get(name);
         return client != null && arena != null && arena.addPlayer(client);
     }
@@ -145,7 +145,7 @@ public class HandlePlayer {
      * @return
      */
     public boolean leaveArena(long userId) {
-        Iplayer client = clientsById.get(userId);
+        Player client = clientsById.get(userId);
         if (client != null) {
             Core arena = client.getArena();
             return arena != null && arena.removePlayer(client);

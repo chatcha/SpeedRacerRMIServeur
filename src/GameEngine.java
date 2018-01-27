@@ -185,4 +185,10 @@ public class GameEngine extends UnicastRemoteObject implements GameEngineInterfa
         party.moveCar(userId, choice, flag);
     }
 
+    @Override
+    public int getScoreClient(long userId) throws RemoteException {
+        
+       return party.getScoreClient(userId);
+    }
+
 }

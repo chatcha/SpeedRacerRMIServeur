@@ -156,12 +156,15 @@ public class Core {
     /**
      * La liste des participants à cette Arena
      */
-    private final HashSet<Iplayer> clients = new HashSet<>();
+    private final HashSet<Player> clients = new HashSet<>();
 
     /**
      * Liste des scores, par joueur
      */
     private final HashMap<String, Integer> scores = new HashMap();
+    
+    
+    private Player player;
 
     /**
      * Constructor
@@ -171,6 +174,14 @@ public class Core {
     public Core(ClientInterface gGUI) {
         this.gGUI = gGUI;
         // scores.put(Color.RED, 0);
+    }
+    
+   /* public Core(Player player) {
+        this.player = player;
+        // scores.put(Color.RED, 0);
+    } */
+     public Core() {
+       
     }
 
     /**
@@ -445,8 +456,11 @@ public class Core {
                     if (runTime == 20) {
                         runTime = 0;
                         if (bGameInProgress == true) {
-                            score += Math.pow(vCars.elementAt(0).ySpeed, 2);
+                         //   score += Math.pow(vCars.elementAt(0).ySpeed, 2);
 
+                            score = (int) (player.getScore() + Math.pow(vCars.elementAt(0).ySpeed, 2));
+                            
+                            player.setScore(score);
                             //score = 
                             //Aller chercher le score de la couleur
                             //Lui rajouter le nombre de tileCourant
@@ -486,6 +500,7 @@ public class Core {
         //Initialize the finite state machine
         initFiniteStateMachine();
 
+        System.out.println("Core.runGame()");
         //Generates the road, obstacles and cars
         newGrid();
 
@@ -550,8 +565,18 @@ public class Core {
                         iFinalPosition = pos;
                     }
 
+                    
+                     javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
+                        @Override
+                        public void run() {
+                            
+                               player.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, vCars.elementAt(0), iFinalPosition, iNbParticipants, bGameFinishing, sFinalPosition);
+                           
+                        }
+                    });
+                    
                     //Ask the GUI to perform its update
-                    javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
+                  /*  javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -560,7 +585,7 @@ public class Core {
                                 Logger.getLogger(Core.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
-                    });
+                    }); */
 
                 }
 
@@ -568,7 +593,11 @@ public class Core {
                 if (runTime == 20) {
                     runTime = 0;
                     if (bGameInProgress == true) {
-                        score += Math.pow(vCars.elementAt(0).ySpeed, 2);
+                       // score += Math.pow(vCars.elementAt(0).ySpeed, 2);
+                      
+                        score = (int) (player.getScore() + Math.pow(vCars.elementAt(0).ySpeed, 2));
+                            
+                        player.setScore(score);
                     }
                 }
             } catch (Exception e) {
@@ -1741,6 +1770,7 @@ public class Core {
         gameRunTime = 0;
         gameMaxRunTime = 1;
 
+        System.out.println("Core.newGrid()");
         //Initializes finite state machine
         initFiniteStateMachine();
         FiniteState currentState = fsStates[0];
@@ -1855,7 +1885,9 @@ public class Core {
      */
     public boolean startGame() {
         // On ne démarre que si on a au moins 1 joueurs et qu'il a choisi sa couleur
-        if (!bGameQuit && !bGameInProgress && clients.size() > 0) {
+        System.out.println("Core.startGame()");
+       // if (!bGameQuit && !bGameInProgress && clients.size() > 0) {
+           if (!bGameQuit && !bGameInProgress ) {
             Thread game = new Thread() {
                 @Override
                 public void run() {
@@ -1884,7 +1916,7 @@ public class Core {
      */
     private String findName(long idWinner) {
 
-        for (Iplayer client : clients) {
+        for (Player client : clients) {
             if (client.getId() == idWinner) {
                 return client.getName();
 
@@ -1900,7 +1932,7 @@ public class Core {
      * @param player
      * @return
      */
-    public synchronized boolean addPlayer(Iplayer player) {
+    public synchronized boolean addPlayer(Player player) {
 
         if (bGameQuit || clients.size() >= iNbParticipants || !clients.add(player) || !player.setArena(this)) {
             clients.remove(player);
@@ -1911,6 +1943,18 @@ public class Core {
         return true;
     }
 
+     public synchronized boolean setPlayer(Player player) {
+
+        if (bGameQuit || !player.setArena(this)) {
+           
+            return false;
+        }
+        
+        this.player = player;
+        System.out.println("ARENA : Client " + player.getName() + " connecté");
+
+        return true;
+    }
     /**
      * Retire un joueur de la partie et remet sa couleur dans les couleurs
      * gérées par l'IA
@@ -1918,7 +1962,7 @@ public class Core {
      * @param player
      * @return
      */
-    public synchronized boolean removePlayer(Iplayer player) {
+    public synchronized boolean removePlayer(Player player) {
         if (clients.remove(player)) {
 
             player.setArena(null);
@@ -1956,6 +2000,9 @@ public class Core {
         bGameInProgress = true;
     }
 
+    public int getScore(){
+       return score;
+    }
     public void moveCar(String choice, boolean flag) {
 
         switch (choice) {

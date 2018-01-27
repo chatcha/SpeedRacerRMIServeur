@@ -134,6 +134,21 @@ public interface GameEngineInterface
      */
     public Vector<Rectangle> listvDisplayRoad(long userId, String name) throws RemoteException;
 
+    /**
+     * 
+     * @param userId
+     * @return
+     * @throws RemoteException 
+     */
+    public int getScoreClient(long userId) throws RemoteException;
+
+    /**
+     * 
+     * @param userId
+     * @param choice
+     * @param flag
+     * @throws RemoteException 
+     */
     public void moveCar(long userId, String choice, boolean flag) throws RemoteException;
 
 } // end interface
