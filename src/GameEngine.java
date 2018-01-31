@@ -1,18 +1,9 @@
 
-import java.awt.Color;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Set;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -41,7 +32,7 @@ public class GameEngine extends UnicastRemoteObject implements GameEngineInterfa
      */
     @Override
     public long connect(ClientInterface client) throws RemoteException {
-        Player cLink = new Player(client.getName(), client, party);
+        Player cLink = new Player(client.getName(),client, party);
 
         if (party.connect(cLink)) {
             System.out.println("Nouveau client connecté : " + client.getName());
@@ -191,4 +182,25 @@ public class GameEngine extends UnicastRemoteObject implements GameEngineInterfa
        return party.getScoreClient(userId);
     }
 
+    @Override
+    public int iFinalPosition(long userId,String name ) throws RemoteException {
+        return party.iFinalPosition(userId,name);
+    }
+
+    @Override
+    public String sFinalPosition(long userId,String name) throws RemoteException {
+         return party.sFinalPosition(userId, name);
+    }
+
+    @Override
+    public boolean bGameFinishing(long userId,String name) throws RemoteException {
+         return party.bGameFinishing(userId,name);
+    }
+
+    @Override
+    public int iNbParticipants(long userId,String name) throws RemoteException {
+        return party.iNbParticipants(userId,name);
+    }
+
+    
 }

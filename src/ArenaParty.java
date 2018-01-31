@@ -25,12 +25,14 @@ public class ArenaParty {
     /**
      * Une map qui va contenir toutes les parties crées
      */
-    private final Map<String, Core> arenasByName = new HashMap<>();
+   // private final Map<String, Core> arenasByName = new HashMap<>();
+    
+     private final Map<String, Core> arenasByName = new HashMap<>();
 
     /**
      * une liste des clients par leurs noms,
      */
-    private final Map<String, Iplayer> clientsByName = new HashMap<>();
+    private final Map<String, Player> clientsByName = new HashMap<>();
 
     /**
      * une liste des clients par leurs id, pour les retrouver quand ils
@@ -138,9 +140,17 @@ public class ArenaParty {
      */
     public boolean joinArena(long userId, String name) {
         Player client = clientsById.get(userId);
-        Core arena = arenasByName.get(name);
-        //return client != null && arena != null && arena.addPlayer(client);
-        return client != null && arena != null && arena.setPlayer(client);
+        Core arena = client.getArena();
+        
+        if(arena==null){
+            client.setCore(new Core());
+             System.out.println("ArenaParty.joinArena() dans if  "+client);
+        }
+        //Core arena = arenasByName.get(name);
+        System.out.println("ArenaParty.joinArena() client "+client.getArena().addPlayer(client));
+        System.out.println("ArenaParty.joinArena() arena  "+client.getArena());
+        return client != null && client.getArena() != null && client.getArena().addPlayer(client);
+       // return client != null && arena != null && arena.setPlayer(client);
     }
 
     /**
@@ -167,7 +177,7 @@ public class ArenaParty {
      */
     public boolean createArena(long userId, String name) {
         Player client = clientsById.get(userId);
-       // Player clientc = clientsById.get(userId);
+      
         if (client != null) {
             Core arena = client.getArena();
             if (arena == null && arenasByName.get(name) == null) {
@@ -206,15 +216,23 @@ public class ArenaParty {
      */
     public boolean startGame(long userId) {
         Player client = clientsById.get(userId);
+        
+        boolean flag = false;
         if (client != null) {
             Core arena = client.getArena();
             if (arena != null) {
-                System.out.println("ArenaParty.startGame()");
-                return arena.startGame();
-                
+               
+                flag = arena.startGame();
+               
+                if(flag==true){
+                     System.out.println("ArenaParty.startGame() reussi");
+                }
+                else
+                     System.out.println("ArenaParty.startGame() a échoué" );
             }
         }
-        return false;
+       
+        return flag;
     }
 
     /**
@@ -247,7 +265,7 @@ public class ArenaParty {
             Core arena = client.getArena();
             if (arena != null) {
                 arena.beginGame();
-
+                System.out.println("ArenaParty.beginGame() lancé partie client");
             }
         }
 
@@ -305,8 +323,9 @@ public class ArenaParty {
      * @return
      */
     public Vector<Rectangle> getVDisplayRoad(long id, String name) {
-        Core arena = arenasByName.get(name);
+       // Core arena = arenasByName.get(name);
         Player client = clientsById.get(id);
+        Core arena = client.getArena();
         if (arena != null && client != null) {
             return arena.vDisplayRoad;
         }
@@ -321,8 +340,10 @@ public class ArenaParty {
      * @return
      */
     public Vector<Car> getVCars(long id, String name) {
-        Core arena = arenasByName.get(name);
+       // Core arena = arenasByName.get(name);
+       
         Player client = clientsById.get(id);
+        Core arena = client.getArena();
         if (arena != null && client != null) {
             return arena.vCars;
         }
@@ -337,8 +358,9 @@ public class ArenaParty {
      * @return
      */
     public Vector<Rectangle> getVDisplayCars(long id, String name) {
-        Core arena = arenasByName.get(name);
+       // Core arena = arenasByName.get(name);
         Player client = clientsById.get(id);
+        Core arena = client.getArena();
         if (arena != null && client != null) {
             return arena.vDisplayCars;
         }
@@ -353,8 +375,9 @@ public class ArenaParty {
      * @return
      */
     public Vector<Rectangle> listvDisplayObstacles(long id, String name) {
-        Core arena = arenasByName.get(name);
+      //  Core arena = arenasByName.get(name);
         Player client = clientsById.get(id);
+        Core arena = client.getArena();
         if (arena != null && client != null) {
             return arena.vDisplayObstacles;
         }
@@ -368,6 +391,49 @@ public class ArenaParty {
      */
     public void setgGUI(ClientInterface gGUI) {
         this.gGUI = gGUI;
+    }
+
+   
+
+    public int iFinalPosition(long id, String name) {
+       // Core arena = arenasByName.get(name);
+        Player client = clientsById.get(id);
+        Core arena = client.getArena();
+        if (arena != null && client != null) {
+            return arena.iFinalPosition;
+        }
+        return arena.iFinalPosition;
+    }
+
+    public String sFinalPosition(long id, String name) {
+        //Core arena = arenasByName.get(name);
+        Player client = clientsById.get(id);
+        Core arena = client.getArena();
+        if (arena != null && client != null) {
+            return arena.sFinalPosition;
+        }
+        return arena.sFinalPosition;
+    
+    }
+
+    public boolean bGameFinishing(long id, String name) {
+       // Core arena = arenasByName.get(name);
+        Player client = clientsById.get(id);
+        Core arena = client.getArena();
+        if (arena != null && client != null) {
+            return arena.bGameFinishing;
+        }
+        return arena.bGameFinishing;
+    }
+
+    public int iNbParticipants(long id, String name) {
+        // Core arena = arenasByName.get(name);
+        Player client = clientsById.get(id);
+        Core arena = client.getArena();
+        if (arena != null && client != null) {
+            return arena.iNbParticipants;
+        }
+        return arena.iNbParticipants;
     }
 
 }

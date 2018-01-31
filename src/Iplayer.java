@@ -47,6 +47,7 @@ public abstract class Iplayer {
      */
     protected Iplayer(String name) {
         this.name = name;
+      
     }
 
     /**

@@ -66,6 +66,7 @@ public class Player extends Iplayer {
                         // Si ca plante, probablement que le client s'est deconnecté
                         // On le retire alors de la partie
                         party.disconnect(getId());
+                        System.out.println(".run() dans update player");
                     }
                 }
             };

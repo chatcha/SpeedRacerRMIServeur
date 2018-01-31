@@ -3,15 +3,10 @@
  * and open the template in the editor.
  */
 
-import java.awt.Color;
-import java.awt.event.KeyEvent;
-import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Performs most of the computations
@@ -39,17 +34,17 @@ public class Core {
     /**
      * True if the finish line has been passed. False otherwise
      */
-    public static boolean bGameFinishing = false;
+    public  boolean bGameFinishing = false;
 
     /**
      * True if the player is currently playing. False otherwise
      */
-    public static boolean bGameInProgress = false;
+    public  boolean bGameInProgress = false;
 
     /**
      * True if the GUI is closing. False otherwise
      */
-    public static boolean bGameQuit = false;
+    public  boolean bGameQuit = false;
 
     /**
      * True if the player is pressing the up arrow key
@@ -458,6 +453,18 @@ public class Core {
                         if (bGameInProgress == true) {
                          //   score += Math.pow(vCars.elementAt(0).ySpeed, 2);
 
+                      /*  Iterator<Player> j = clients.iterator();
+                        while (j.hasNext()) {
+                            Player currentPlayer = j.next();
+                            if (currentPlayer.getId()== player.getId()) {
+                                //Aller chercher le score de la couleur
+                                //Lui rajouter le nombre de tileCourant
+                               score = (int) (player.getScore() + Math.pow(vCars.elementAt(0).ySpeed, 2));
+                            
+                                 player.setScore(score);
+                                  scores.put(currentPlayer.getName(), score + currentPlayer.getScore());
+                            }
+                        } */
                             score = (int) (player.getScore() + Math.pow(vCars.elementAt(0).ySpeed, 2));
                             
                             player.setScore(score);
@@ -566,7 +573,11 @@ public class Core {
                     }
 
                     
-                     javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
+                     /*clients.forEach(client -> {
+                            client.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, vCars.elementAt(0), iFinalPosition, iNbParticipants, bGameFinishing, sFinalPosition);
+                           
+                        });*/
+                    javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
                         @Override
                         public void run() {
                             
@@ -593,9 +604,23 @@ public class Core {
                 if (runTime == 20) {
                     runTime = 0;
                     if (bGameInProgress == true) {
+                        
+                        
+                      /*   Iterator<Player> j = clients.iterator();
+                        while (j.hasNext()) {
+                            Player currentPlayer = j.next();
+                            if (currentPlayer.getId()== player.getId()) {
+                                //Aller chercher le score de la couleur
+                                //Lui rajouter le nombre de tileCourant
+                               score = (int) (player.getScore() + Math.pow(vCars.elementAt(0).ySpeed, 2));
+                            
+                                 player.setScore(score);
+                                  scores.put(currentPlayer.getName(), score + currentPlayer.getScore());
+                            }
+                        }*/
                        // score += Math.pow(vCars.elementAt(0).ySpeed, 2);
                       
-                        score = (int) (player.getScore() + Math.pow(vCars.elementAt(0).ySpeed, 2));
+                       score = (int) (player.getScore() + Math.pow(vCars.elementAt(0).ySpeed, 2));
                             
                         player.setScore(score);
                     }
@@ -1770,6 +1795,7 @@ public class Core {
         gameRunTime = 0;
         gameMaxRunTime = 1;
 
+        score = 0;
         System.out.println("Core.newGrid()");
         //Initializes finite state machine
         initFiniteStateMachine();
@@ -1885,9 +1911,10 @@ public class Core {
      */
     public boolean startGame() {
         // On ne démarre que si on a au moins 1 joueurs et qu'il a choisi sa couleur
-        System.out.println("Core.startGame()");
+       
        // if (!bGameQuit && !bGameInProgress && clients.size() > 0) {
            if (!bGameQuit && !bGameInProgress ) {
+             
             Thread game = new Thread() {
                 @Override
                 public void run() {
@@ -1895,8 +1922,12 @@ public class Core {
                 }
             };
             game.start();
+              System.out.println("!bGameQuit "+!bGameQuit+" !bGameInProgress "+!bGameInProgress); 
+             System.out.println("Core.startGame() : jeu lancé");
             return true;
         }
+            System.out.println("!bGameQuit "+!bGameQuit+" !bGameInProgress "+!bGameInProgress);
+            System.out.println("Core.startGame() : le jeu n'a pas été lancé " );
         return false;
     }
 
@@ -1934,10 +1965,13 @@ public class Core {
      */
     public synchronized boolean addPlayer(Player player) {
 
-        if (bGameQuit || clients.size() >= iNbParticipants || !clients.add(player) || !player.setArena(this)) {
-            clients.remove(player);
+        System.out.println("Core.addPlayer() bGameQuit"+bGameQuit);
+       // if (bGameQuit || clients.size() >= iNbParticipants || !clients.add(player) || !player.setArena(this)) {
+        if (bGameQuit || !player.setCore(this)) {
+           // clients.remove(player);
             return false;
         }
+        this.player = player;
         System.out.println("ARENA : Client " + player.getName() + " connecté");
 
         return true;
@@ -1951,7 +1985,7 @@ public class Core {
         }
         
         this.player = player;
-        System.out.println("ARENA : Client " + player.getName() + " connecté");
+        System.out.println("Dans setplayer ARENA : Client " + player.getName() + " connecté");
 
         return true;
     }
