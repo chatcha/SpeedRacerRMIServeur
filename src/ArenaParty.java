@@ -139,18 +139,9 @@ public class ArenaParty {
      * @return
      */
     public boolean joinArena(long userId, String name) {
-        Player client = clientsById.get(userId);
-        Core arena = client.getArena();
-        
-        if(arena==null){
-            client.setCore(new Core());
-             System.out.println("ArenaParty.joinArena() dans if  "+client);
-        }
-        //Core arena = arenasByName.get(name);
-        System.out.println("ArenaParty.joinArena() client "+client.getArena().addPlayer(client));
-        System.out.println("ArenaParty.joinArena() arena  "+client.getArena());
-        return client != null && client.getArena() != null && client.getArena().addPlayer(client);
-       // return client != null && arena != null && arena.setPlayer(client);
+       Player client = clientsById.get(userId);
+        Core arena = arenasByName.get(name);
+        return client != null && arena != null && arena.addPlayer(client);
     }
 
     /**
