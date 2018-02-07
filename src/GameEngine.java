@@ -119,7 +119,7 @@ public class GameEngine extends UnicastRemoteObject implements GameEngineInterfa
      * @throws RemoteException
      */
     @Override
-    public HashMap<String, Integer> getScores(long userId) throws RemoteException {
+    public HashMap<Long, Integer> getScores(long userId) throws RemoteException {
         return party.getScores(userId);
     }
 

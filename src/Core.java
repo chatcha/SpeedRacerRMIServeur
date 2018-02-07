@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
@@ -26,25 +27,26 @@ public class Core {
      */
     public int iTickDelay = 30;
 
-    /**
+     /**
      * Utiliser pour le netoyage du serveur Représente le timeStamp au quel la
      * partie s'est arretée Par défaut loin dans le futur avec maxValue
      */
     private long gameStoppedAt = Long.MAX_VALUE;
+
     /**
      * True if the finish line has been passed. False otherwise
      */
-    public  boolean bGameFinishing = false;
+    public static boolean bGameFinishing = false;
 
     /**
      * True if the player is currently playing. False otherwise
      */
-    public  boolean bGameInProgress = false;
+    public static boolean bGameInProgress = false;
 
     /**
      * True if the GUI is closing. False otherwise
      */
-    public  boolean bGameQuit = false;
+    public static boolean bGameQuit = false;
 
     /**
      * True if the player is pressing the up arrow key
@@ -81,45 +83,53 @@ public class Core {
     /**
      * The number of competitors (not civilians)
      */
-    public int iNbParticipants = 4;
+    public int iNbParticipants;
 
-    /**
+     /**
      * Vector containing the road elements (including the obtacles)
      */
     public Vector<Rectangle>[] vTabRoad = new Vector[108];
-
+    
     /**
-     * Vector containing the obstacles that must be taken into account for
-     * collision detection (thus also includes cars)
+     * Vector containing the obstacles that must be taken into account for collision detection (thus also includes cars)
      */
     public Vector<CollidableRectangle>[] vTabObstacles = new Vector[109];
-
+    
     /**
      * Vector containing the cars
      */
     public Vector<Car> vCars = new Vector<Car>();
 
     /**
-     * Vector containing the road elements to display in the sliding window
-     * (layer 1)
+     * Vector containing the road elements to display in the sliding window (layer 1)
      */
     public Vector<Rectangle> vDisplayRoad = new Vector<Rectangle>();
-
+    
     /**
-     * Vector containing the obstacles to display in the sliding window (layer
-     * 2)
+     * Vector containing the obstacles to display in the sliding window (layer 2)
      */
     public Vector<Rectangle> vDisplayObstacles = new Vector<Rectangle>();
-
+    
     /**
      * Vector containing the cars to display in the sliding window (layer 3)
      */
     public Vector<Rectangle> vDisplayCars = new Vector<Rectangle>();
+    
+     /**
+     * La liste des clients participants à cette Arena
+     */
+    private final HashSet<Player> clients = new HashSet<>();
+    
+     /**
+     * Liste des scores, par couleur
+     */
+    private final HashMap<Long, Integer> scores = new HashMap();
+
 
     /**
      * A reference to the graphical user interface
      */
-    private ClientInterface gGUI;
+//    private GUI gGUI;
 
     /**
      * The finite state arraw representing the finite state machine
@@ -147,36 +157,31 @@ public class Core {
      * X ticks)
      */
     private int gameMaxRunTime = 1;
-
-    /**
-     * La liste des participants à cette Arena
-     */
-    private final HashSet<Player> clients = new HashSet<>();
-
-    /**
-     * Liste des scores, par joueur
-     */
-    private final HashMap<String, Integer> scores = new HashMap();
     
+    private ClientInterface client;
     
     private Player player;
 
+    
+    private Long id ;
     /**
      * Constructor
      *
      * @param gGUI The reference to the graphical user interface
      */
-    public Core(ClientInterface gGUI) {
-        this.gGUI = gGUI;
-        // scores.put(Color.RED, 0);
+    public Core(ClientInterface client) {
+        this.client = client;
+        
+       
     }
     
-   /* public Core(Player player) {
-        this.player = player;
+    public Core(){
+   
+    }
+    
+     public Core(Player client) {
+        this.player = client;
         // scores.put(Color.RED, 0);
-    } */
-     public Core() {
-       
     }
 
     /**
@@ -408,7 +413,7 @@ public class Core {
                     //If we must update the game status
                     if (gameRunTime % gameMaxRunTime == 0 && bGameInProgress == true) {
 
-                        //Move the cars according to their speed, acceleration and to the pressed keys (for player car only)
+//Move the cars according to their speed, acceleration and to the pressed keys (for player car only)
                         moveCars(UP_P, DO_P, LE_P, RI_P, vCars);
 
                         //Manage the collisions (the finish line is a CollidableRectangle, so it also tells whether the game must end soon)
@@ -447,32 +452,11 @@ public class Core {
 
                     }
 
-                    //The  updates every second if the game is running by adding the square of the current player car speed
+                    //The score updates every second if the game is running by adding the square of the current player car speed
                     if (runTime == 20) {
                         runTime = 0;
                         if (bGameInProgress == true) {
-                         //   score += Math.pow(vCars.elementAt(0).ySpeed, 2);
-
-                      /*  Iterator<Player> j = clients.iterator();
-                        while (j.hasNext()) {
-                            Player currentPlayer = j.next();
-                            if (currentPlayer.getId()== player.getId()) {
-                                //Aller chercher le score de la couleur
-                                //Lui rajouter le nombre de tileCourant
-                               score = (int) (player.getScore() + Math.pow(vCars.elementAt(0).ySpeed, 2));
-                            
-                                 player.setScore(score);
-                                  scores.put(currentPlayer.getName(), score + currentPlayer.getScore());
-                            }
-                        } */
-                            score = (int) (player.getScore() + Math.pow(vCars.elementAt(0).ySpeed, 2));
-                            
-                            player.setScore(score);
-                            //score = 
-                            //Aller chercher le score de la couleur
-                            //Lui rajouter le nombre de tileCourant
-                            // int currentScore = scores.get(i);
-                            // scores.put(currentTile.BacColor, currentScore + currentTile.Nb);
+                            score += Math.pow(vCars.elementAt(0).ySpeed, 2);
                         }
                     }
                 } catch (Exception e) {
@@ -507,16 +491,11 @@ public class Core {
         //Initialize the finite state machine
         initFiniteStateMachine();
 
-        System.out.println("Core.runGame()");
         //Generates the road, obstacles and cars
         newGrid();
 
         iTickDelay = computeTickValueForCurrentSystem();
-        /*    try {
-            gGUI.setEnabled(true);
-        } catch (RemoteException ex) {
-            Logger.getLogger(Core.class.getName()).log(Level.SEVERE, null, ex);
-        } */
+    //    gGUI.jButton1.setEnabled(true);
 
         //Initializes the game status booleans
         bGameQuit = false;
@@ -573,30 +552,20 @@ public class Core {
                     }
 
                     
-                     /*clients.forEach(client -> {
+                     //On mis à jour tous les clients
+                        clients.forEach(client -> {
                             client.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, vCars.elementAt(0), iFinalPosition, iNbParticipants, bGameFinishing, sFinalPosition);
-                           
-                        });*/
-                    javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
-                        @Override
-                        public void run() {
-                            
-                               player.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, vCars.elementAt(0), iFinalPosition, iNbParticipants, bGameFinishing, sFinalPosition);
-                           
-                        }
-                    });
-                    
+                  
+                        });
+                                 // player.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, vCars.elementAt(0), iFinalPosition, iNbParticipants, bGameFinishing, sFinalPosition);
+                  
                     //Ask the GUI to perform its update
                   /*  javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                gGUI.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, vCars.elementAt(0), iFinalPosition, iNbParticipants, bGameFinishing, sFinalPosition);
-                            } catch (RemoteException ex) {
-                                Logger.getLogger(Core.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+                            gGUI.update(vDisplayRoad, vDisplayObstacles, vDisplayCars, vCars.elementAt(0), iFinalPosition, iNbParticipants, bGameFinishing, sFinalPosition);
                         }
-                    }); */
+                    });*/
 
                 }
 
@@ -604,25 +573,7 @@ public class Core {
                 if (runTime == 20) {
                     runTime = 0;
                     if (bGameInProgress == true) {
-                        
-                        
-                      /*   Iterator<Player> j = clients.iterator();
-                        while (j.hasNext()) {
-                            Player currentPlayer = j.next();
-                            if (currentPlayer.getId()== player.getId()) {
-                                //Aller chercher le score de la couleur
-                                //Lui rajouter le nombre de tileCourant
-                               score = (int) (player.getScore() + Math.pow(vCars.elementAt(0).ySpeed, 2));
-                            
-                                 player.setScore(score);
-                                  scores.put(currentPlayer.getName(), score + currentPlayer.getScore());
-                            }
-                        }*/
-                       // score += Math.pow(vCars.elementAt(0).ySpeed, 2);
-                      
-                       score = (int) (player.getScore() + Math.pow(vCars.elementAt(0).ySpeed, 2));
-                            
-                        player.setScore(score);
+                        score += Math.pow(vCars.elementAt(0).ySpeed, 2);
                     }
                 }
             } catch (Exception e) {
@@ -632,13 +583,15 @@ public class Core {
         }
     }
 
-   /**
-    * Manages the collisions
-    * @param Cars
-    * @param vTabObstacles
-    * @param bGameFinishing
-    * @return 
-    */
+    /**
+     * Manages the collisions
+     *
+     * @param Cars The vector of cars (which are the actors of the collision)
+     * @param vObstacles The vector of obstacles (which are passively collided).
+     * Also contains the cars
+     * @param bGameFinishing True if the finish line has been passed
+     * @return True if the finish line has just been passed. False otherwise
+     */
     public boolean manageCollisions(Vector<Car> Cars, Vector<CollidableRectangle>[] vTabObstacles, boolean bGameFinishing) {
         //Is the finish line been passed?
         boolean bgf = bGameFinishing;
@@ -847,11 +800,11 @@ public class Core {
                     myCar.yAcc--;
                 }
             } else //Iteratively reachs a constant deceleration of -1 if no key is pressed
-             if (myCar.yAcc > -1) {
-                    myCar.yAcc--;
-                } else if (myCar.yAcc < -1) {
-                    myCar.yAcc++;
-                }
+            if (myCar.yAcc > -1) {
+                myCar.yAcc--;
+            } else if (myCar.yAcc < -1) {
+                myCar.yAcc++;
+            }
         } else {
             //If we passed the finish line, we must decelerate
             myCar.yAcc = -8;
@@ -869,20 +822,20 @@ public class Core {
                 myCar.xAcc--;
             }
         } else //If we don't press anything, the x acceleration is calculated to iteratively counter the x speed and make it reach 0
-         if (myCar.xSpeed > 1) {
-                myCar.xAcc = -(int) (myCar.xSpeed + 1);
-                if (myCar.xAcc < -4) {
-                    myCar.xAcc = -4;
-                }
-            } else if (myCar.xSpeed < -1) {
-                myCar.xAcc = -(int) (myCar.xSpeed - 1);
-                if (myCar.xAcc > 4) {
-                    myCar.xAcc = 4;
-                }
-            } else {
-                myCar.xAcc = 0;
-                myCar.xSpeed = 0;
+        if (myCar.xSpeed > 1) {
+            myCar.xAcc = -(int) (myCar.xSpeed + 1);
+            if (myCar.xAcc < -4) {
+                myCar.xAcc = -4;
             }
+        } else if (myCar.xSpeed < -1) {
+            myCar.xAcc = -(int) (myCar.xSpeed - 1);
+            if (myCar.xAcc > 4) {
+                myCar.xAcc = 4;
+            }
+        } else {
+            myCar.xAcc = 0;
+            myCar.xSpeed = 0;
+        }
 
         //We then scan the other cars
         Iterator<Car> iCars = vCars.iterator();
@@ -911,12 +864,12 @@ public class Core {
                 if (!bGameFinishing) {
                     currentCar.ySpeed = 0.5;
                 } else //Unless the player passes the finish line which, at this point, stops the game
-                 if (currentCar.id == 6) {
-                        currentCar.ySpeed = 0;
-                        bGameInProgress = false;
-                    } else {
-                        currentCar.ySpeed = 0.5;
-                    }
+                if (currentCar.id == 6) {
+                    currentCar.ySpeed = 0;
+                    bGameInProgress = false;
+                } else {
+                    currentCar.ySpeed = 0.5;
+                }
             } //The opponents will try to stay at 3.58
             else if (currentCar.ySpeed > 3.5 && currentCar.Racer && currentCar.id == 7) {
                 currentCar.ySpeed = (currentCar.ySpeed - 3.5) * 0.8 + 3.5;
@@ -967,12 +920,14 @@ public class Core {
     /**
      * Extracts the visible rectangles to display according to the player's car
      * position and speed
-     * @param vTabRoad
-     * @param vTabObstacles
-     * @param vCars
-     * @param vDisplayRoad
-     * @param vDisplayObstacles
-     * @param vDisplayCars 
+     *
+     * @param vRoad The vector of road elements
+     * @param vObstacles The vector of obstacles
+     * @param vCars The vector of cars
+     * @param vDisplayRoad The vector of road elements to display (updated)
+     * @param vDisplayObstacles The vector of collision warning rectagles
+     * (updated)
+     * @param vDisplayCars The vector of cars to display (updated)
      */
     public void findDisplayRectangles(Vector<Rectangle>[] vTabRoad, Vector<CollidableRectangle>[] vTabObstacles, Vector<Car> vCars,
             Vector<Rectangle> vDisplayRoad, Vector<Rectangle> vDisplayObstacles, Vector<Rectangle> vDisplayCars) {
@@ -1095,14 +1050,16 @@ public class Core {
         return rr;
     }
 
-  /**
-   * Uses the randomly selected state to generate a new road segment of size
-   * 400x400
-   * @param vTabRoad
-   * @param vTabObstacles
-   * @param iSegmentId
-   * @param offset 
-   */
+    /**
+     * Uses the randomly selected state to generate a new road segment of size
+     * 400x400
+     *
+     * @param vRoad The vector of road elements (updated)
+     * @param vObstacles The vector of obstacles (updated)
+     * @param iSegmentId The id of the state that were randomly selected by the
+     * finite state machine
+     * @param offset The offset to apply to the 400x400 segment on the y axis
+     */
     public void generateNextRoadSegment(Vector<Rectangle>[] vTabRoad, Vector<CollidableRectangle>[] vTabObstacles, int iSegmentId, int offset) {
         //The machine has 14 states.
         //For each character in the String representation of a state,
@@ -1795,8 +1752,6 @@ public class Core {
         gameRunTime = 0;
         gameMaxRunTime = 1;
 
-        score = 0;
-        System.out.println("Core.newGrid()");
         //Initializes finite state machine
         initFiniteStateMachine();
         FiniteState currentState = fsStates[0];
@@ -1890,106 +1845,29 @@ public class Core {
             vTabObstacles[(pos - 1000) / 400].add(crTemp);
         }
 
-        bGameFinishing = false; // test
-        bGameInProgress = true; // test
     }
 
-    /**
-     * Renvoie les scores actuels
-     *
-     * @return
-     */
-    public HashMap<String, Integer> getScores() {
-        return scores;
-    }
-
-    /**
-     * Démarre une partie, si au moins un joueur est connecté et si tous les
-     * joueurs on choisi leur couleur
-     *
-     * @return
-     */
-    public boolean startGame() {
-        // On ne démarre que si on a au moins 1 joueurs et qu'il a choisi sa couleur
-       
-       // if (!bGameQuit && !bGameInProgress && clients.size() > 0) {
-           if (!bGameQuit && !bGameInProgress ) {
-             
-            Thread game = new Thread() {
-                @Override
-                public void run() {
-                    runGame();
-                }
-            };
-            game.start();
-              System.out.println("!bGameQuit "+!bGameQuit+" !bGameInProgress "+!bGameInProgress); 
-             System.out.println("Core.startGame() : jeu lancé");
-            return true;
-        }
-            System.out.println("!bGameQuit "+!bGameQuit+" !bGameInProgress "+!bGameInProgress);
-            System.out.println("Core.startGame() : le jeu n'a pas été lancé " );
-        return false;
-    }
-
-    /**
-     * Nettoie l'Arena (pour le nettoyage du serveur), en vue de la supprimer
-     */
-    public synchronized void clearGame() {
-        clients.forEach(client -> {
-            removePlayer(client);
-        });
-    }
-
-    /**
-     * Pour aller chercher le nom du gagnant en fonction de son ID
-     * @param idWinner
-     * @return 
-     */
-    private String findName(long idWinner) {
-
-        for (Player client : clients) {
-            if (client.getId() == idWinner) {
-                return client.getName();
-
-            }
-        }
-
-        return "unknown";
-    }
-
+    
+    
     /**
      * Ajoute un joueur a la partie
      *
      * @param player
      * @return
      */
-    public synchronized boolean addPlayer(Player player) {
+    public synchronized boolean addPlayer(Player  player) {
 
-        System.out.println("Core.addPlayer() bGameQuit"+bGameQuit);
-       // if (bGameQuit || clients.size() >= iNbParticipants || !clients.add(player) || !player.setArena(this)) {
-        if (bGameQuit || !player.setCore(this)) {
-           // clients.remove(player);
+        if (bGameQuit || clients.size() >= 3|| !clients.add(player) || !player.setArena(this)) {
+            clients.remove(player);
             return false;
         }
-        this.player = player;
         System.out.println("ARENA : Client " + player.getName() + " connecté");
 
         return true;
     }
 
-     public synchronized boolean setPlayer(Player player) {
-
-        if (bGameQuit || !player.setArena(this)) {
-           
-            return false;
-        }
-        
-        this.player = player;
-        System.out.println("Dans setplayer ARENA : Client " + player.getName() + " connecté");
-
-        return true;
-    }
-    /**
+    
+      /**
      * Retire un joueur de la partie et remet sa couleur dans les couleurs
      * gérées par l'IA
      *
@@ -1998,9 +1876,11 @@ public class Core {
      */
     public synchronized boolean removePlayer(Player player) {
         if (clients.remove(player)) {
-
+          
+           
+            // Si c'est le dernier joueur et que le jeu était en cours, on stoppe le jeu !
             player.setArena(null);
-
+          
             System.out.println("ARENA : Client " + player.getName() + " déconnecté");
             if (clients.isEmpty() && bGameInProgress) {
                 System.out.println("ARENA : Plus de joueurs connectés.");
@@ -2010,16 +1890,50 @@ public class Core {
         }
         return false;
     }
-
-    public long getStoppedAt() {
+    
+   
+     public long getStoppedAt() {
         return gameStoppedAt;
+    }
+    
+        /**
+     * Renvoie les scores actuels
+     *
+     * @return
+     */
+    public HashMap<Long, Integer> getScores() {
+        return scores;
+    }
+
+   
+    /**
+     * Démarre une partie, si au moins un joueur est connecté et si tous les
+     * joueurs on choisi leur couleur
+     *
+     * @return
+     */
+    public boolean startGame() {
+        // On ne démarre que si on a au moins 1 joueurs et qu'il a choisi sa couleur
+      
+        if (!bGameQuit && !bGameInProgress && clients.size() > 0) {
+            Thread game = new Thread() {
+                @Override
+                public void run() {
+                    runGame();
+                }
+            };
+            game.start();
+              System.out.println("!bGameQuit "+!bGameQuit+" !bGameInProgress "+!bGameInProgress);
+            return true;
+        }
+          System.out.println("!bGameQuit "+!bGameQuit+" !bGameInProgress "+!bGameInProgress);
+        return false;
     }
 
     /**
      * Arrete un jeu en cour
      */
     public void stopGame() {
-
         //On enregistre l'heure de fin, si ce n'est déjà fait.
         if (gameStoppedAt == Long.MAX_VALUE) {
             gameStoppedAt = System.currentTimeMillis();
@@ -2028,34 +1942,47 @@ public class Core {
         bGameInProgress = false;
     }
 
-    public void beginGame() {
+    /**
+     * Nettoie l'Arena (pour le nettoyage du serveur), en vue de la supprimer
+     */
+    public synchronized void clearGame() {
+        clients.forEach(client -> {
+            removePlayer(client);
+        });
+    
+   }
 
-        bGameFinishing = false;
-        bGameInProgress = true;
-    }
-
-    public int getScore(){
+      public synchronized  int getScore(){
        return score;
     }
-    public void moveCar(String choice, boolean flag) {
-
+    public  synchronized  void moveCar(String choice, boolean flag,Long idClient) {
+        this.id = idClient;
         switch (choice) {
             case Constants.UP:
                 UP_P = flag;
+              
                 break;
             case Constants.DOWN:
                 DO_P = flag;
+               
                 break;
             case Constants.RIGHT:
                 RI_P = flag;
+               
                 break;
             case Constants.LEFT:
                 LE_P = flag;
+               
                 break;
             default:
                 break;
         }
 
     }
-
+    void beginGame() {
+      bGameFinishing = false;
+      bGameInProgress = true;  
+    
+    }
+    
 }

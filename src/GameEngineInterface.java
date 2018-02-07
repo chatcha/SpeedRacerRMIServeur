@@ -1,6 +1,7 @@
 
 import java.awt.Color;
 import java.rmi.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -69,7 +70,7 @@ public interface GameEngineInterface
     * @return
     * @throws RemoteException 
     */
-    public Map<String, Integer> getScores(long userId) throws RemoteException;
+    public Map<Long, Integer> getScores(long userId) throws RemoteException;
 
    /**
     * Renvoyer la liste Vector containing the obstacles to display in the

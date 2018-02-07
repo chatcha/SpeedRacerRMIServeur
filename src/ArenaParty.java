@@ -188,7 +188,7 @@ public class ArenaParty {
      * @param userId
      * @return
      */
-    public HashMap<String, Integer> getScores(long userId) {
+    public HashMap<Long, Integer> getScores(long userId) {
         Player client = clientsById.get(userId);
         if (client != null) {
             Core arena = client.getArena();
@@ -290,7 +290,7 @@ public class ArenaParty {
         if (client != null) {
             Core arena = client.getArena();
             if (arena != null) {
-                arena.moveCar(choice, flag);
+                arena.moveCar(choice, flag,userId);
 
             }
         }

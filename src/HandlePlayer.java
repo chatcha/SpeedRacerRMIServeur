@@ -181,7 +181,7 @@ public class HandlePlayer {
      * @param userId
      * @return
      */
-    public HashMap<String, Integer> getScores(long userId) {
+    public HashMap<Long, Integer> getScores(long userId) {
         Iplayer client = clientsById.get(userId);
         if (client != null) {
             Core arena = client.getArena();
